@@ -1,0 +1,31 @@
+
+  ri= somme (note * poids) : facteur
+  sc=somme (note * poids) :domaine
+  rr =ri*fa
+
+ fa valeur efa definie mihitsy hoe si:
+    SC <=1 dia FA = 0.35
+    SC <=2 dia FA = 0.60
+    SC <=3 dia FA = 0.85
+    SC sup 3 dia FA = 0.35
+
+
+  seuil par ri:
+    1 à 4: risque maitrié
+    5 à 8: risque acceptable
+    9 à 12: risque important
+    13 à 16 : risque inacceptable
+
+ seuil de risque global:
+    <=20 : faible
+    21 - 40 : modére
+    41-60 Eleve
+    ≥61 :Critique
+
+RI = Σ (note_facteur × poids_facteur)
+Pondérations : Clients (0,25), Produits (0,25), Transactions (0,20),
+            Géographie (0,15), Canaux (0,10), Secteur (0,05)=1
+
+
+Pondérations :CDD/EDD (0,25),TM/STR (0,25), SFC/PPE (0,20), Gouvernance (0,10), Audit (0,10), Formation (0,05), IT (0,05)
+SC ito 
