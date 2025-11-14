@@ -50,7 +50,7 @@ public class AuthService {
     }
 
     public AuthResponse register(RegisterRequest request) {
-        if (utilisateurRepository.findByEmail(request.getEmail()).isPresent()) {
+        if (utilisateurRepository.existsByEmail(request.getEmail())) {
             throw new RuntimeException("Email déjà utilisé");
         }
 
@@ -93,7 +93,7 @@ public class AuthService {
         // Créer une institution uniquement pour le rôle institution
         if ("institution".equals(roleLibelle)) {
             String idInstitution = UUID.randomUUID().toString();
-            Institution institution = new Institution(idInstitution, nom, adresse, null, user);
+            Institution institution = new Institution(idInstitution, nom, adresse, user);
             institutionRepository.save(institution);
         }
 

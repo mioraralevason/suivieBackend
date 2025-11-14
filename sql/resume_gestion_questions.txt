@@ -1,0 +1,56 @@
+RÉSUMÉ DE LA GESTION DES QUESTIONS SELON LES TABLES
+
+1. TABLE UTILISATEUR
+-------------------
+- Contient les informations d'authentification des utilisateurs
+- Chaque utilisateur est lié à une institution via la clé étrangère id_utilisateur
+- Contient email, mot de passe (hashé), nom, prénom, rôle, etc.
+
+2. TABLE INSTITUTION  
+-------------------
+- Représente l'entité principale (banque, cabinet d'avocats, etc.)
+- Contient les informations de base : dénomination sociale, adresse, activité principale, etc.
+- Liée à un utilisateur via la clé étrangère id_utilisateur
+- Stocke les informations I2-I13 du questionnaire
+
+3. TABLE EPNFD_SECTORS
+----------------------
+- Table de référence contenant les secteurs EPNFD (A1.1 à A1.8)
+- Exemples : Casinos, Immobilier, Métaux précieux, Avocats, Comptables, TCSP, Véhicules, Transporteurs
+- Chaque secteur a un ID, libellé et description
+
+4. TABLE INSTITUTION_EPNFD_RESPONSES
+-----------------------------------
+- Table de jonction entre institutions et secteurs EPNFD
+- Stocke les réponses (OUI/NON) des institutions aux questions de secteur (A1-A1.8)
+- Permet de savoir quels secteurs concernent une institution
+- Clés étrangères : id_institution (vers table institution) et id_sector (vers table epnfd_sectors)
+
+5. TABLE ACTIVITY_DETAILS  
+------------------------
+- Table de référence contenant les questions d'activité (B1-B19)
+- Chaque question est liée à un secteur EPNFD spécifique via id_sector
+- Contient libellé et description de chaque question
+- Exemples : Questions sur opérations en espèces, fractionnement, gestion de fonds, etc.
+
+6. TABLE INSTITUTION_ACTIVITY_RESPONSES
+--------------------------------------
+- Table de jonction entre institutions et questions d'activité
+- Stocke les réponses (OUI/NON) et justifications des institutions aux questions d'activité (B1-B19)
+- Clés étrangères : id_institution (vers table institution) et id_activity (vers table activity_details)
+- Permet de sauvegarder les réponses spécifiques de chaque institution
+
+FONCTIONNEMENT GLOBAL
+--------------------
+1. L'utilisateur se connecte et accède à son institution
+2. Le système identifie les secteurs EPNFD concernés pour l'institution (via institution_epnfd_responses)
+3. Le système affiche les questions d'activité pertinentes selon les secteurs sélectionnés (via activity_details.id_sector)
+4. Les réponses sont sauvegardées dans institution_activity_responses
+5. Ces données servent à évaluer le risque et à répondre au questionnaire complet
+
+apres connexion pour le role 'institution', ajouter une colonne 'valide at' et 'complited_info_at'
+ si 'completed_info_at' est encore null, l'utilisateur doit etre forcer à remplir les informations:
+    Comme: 
+    denomination_sociale,nom_commercial,forme_juridiquEe,date_debut_operations,adresse_siege_social ,adresse_activite_principale,
+    adresses_secondaires ,numero_telephone ,adresse_email,liste_activites,activite_principale,activites_secondaires 
+    apres elle passe dans le Details actiivite selon la secteur ou elle se situe

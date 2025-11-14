@@ -1,0 +1,62 @@
+GESTION DES INFORMATIONS INSTITUTIONNELLES - WORKFLOW DÉTAILLÉ
+
+1. NOUVELLES COLONNES AJOUTÉES À LA TABLE INSTITUTION
+--------------------------------------------------
+- validated_at TIMESTAMP: Date de validation finale
+- completed_info_at TIMESTAMP: Date de complétion des informations de base
+
+2. FLOW D'AUTHENTIFICATION POUR LE RÔLE 'INSTITUTION'
+---------------------------------------------------
+Étape 1: Connexion de l'utilisateur avec rôle 'institution'
+Étape 2: Vérification du champ completed_info_at
+  - SI completed_info_at EST NULL → Redirection vers le formulaire de complétion des informations
+  - SI completed_info_at N'EST PAS NULL → Accès autorisé aux fonctionnalités normales
+
+3. COMPLÉTION DES INFORMATIONS DE BASE (I2-I13)
+--------------------------------------------
+L'utilisateur doit remplir :
+- denomination_sociale (I2) - *obligatoire*
+- nom_commercial (I3)
+- forme_juridique (I4)
+- date_debut_operations (I5) - *obligatoire*
+- adresse_siege_social (I6) - *obligatoire*
+- adresse_activite_principale (I7)
+- adresses_secondaires (I8)
+- numero_telephone (I9) - *obligatoire*
+- adresse_email (I10) - *obligatoire*
+- liste_activites (I11)
+- activite_principale (I12)
+- activites_secondaires (I13)
+
+4. VALIDATION DES INFORMATIONS
+----------------------------
+Après la complétion des informations de base :
+- Le système met à jour completed_info_at avec la date/heure actuelle
+- L'utilisateur est redirigé vers l'étape suivante
+
+5. DÉTAILS D'ACTIVITÉ SELON LE SECTEUR
+-----------------------------------
+Étape 1: L'utilisateur répond aux questions de secteur EPNFD (A1-A1.8)
+Étape 2: En fonction des secteurs sélectionnés, le système affiche les questions d'activité spécifiques (B1-B19)
+  - Ex: Si 'Casinos' → afficher B1, B2
+  - Ex: Si 'Immobilier' → afficher B3
+  - Ex: Si 'Avocats' → afficher B6, B7, B8, B9, B10, B11
+Étape 3: Les réponses sont sauvegardées dans institution_activity_responses
+
+6. LOGIQUE MÉTIER
+---------------
+- Les champs marqués *obligatoire* doivent être remplis pour permettre la complétion
+- Une fois completed_info_at renseigné, l'utilisateur ne peut plus accéder au formulaire d'information de base sans autorisation spéciale
+- Le champ validated_at sera utilisé pour indiquer la validation finale par un superviseur/administrateur
+
+7. CONTRÔLE D'ACCÈS
+-----------------
+- Si completed_info_at IS NULL → Obligation de compléter les informations de base
+- Si completed_info_at IS NOT NULL ET validated_at IS NULL → Accès aux fonctionnalités mais pas de validation finale
+- Si validated_at IS NOT NULL → Accès complet au système
+
+CETTE STRUCTURE PERMET DE :
+- Forcer la complétion des informations de base après la connexion
+- Adapter les questions d'activité en fonction du secteur de l'institution
+- Maintenir une traçabilité du processus de complétion
+- Garantir la qualité des données avant la validation finale

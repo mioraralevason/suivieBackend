@@ -28,7 +28,7 @@ public class Utilisateur {
     private LocalDateTime modifieLe = LocalDateTime.now();
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_role", nullable = false)
+    @JoinColumn(name = "id_role", nullable = false, referencedColumnName = "id_role")
     private Role role;
 
     // Constructeur sans arguments
