@@ -45,6 +45,13 @@ public class SecurityConfig {
                 .requestMatchers("/api/scoring/**")
                 .hasAnyAuthority("admin", "superviseur")
 
+                // Allow institutional workflow endpoints for authenticated users
+                .requestMatchers("/api/institution/workflow/status").authenticated()
+                .requestMatchers("/api/institution/update-info").authenticated()
+                .requestMatchers("/api/institution/completion-status").authenticated()
+                .requestMatchers("/api/institution/activity/details/**").authenticated()
+                .requestMatchers("/api/institution/activity/save-responses/**").authenticated()
+
                 .anyRequest().authenticated()
             )
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)  

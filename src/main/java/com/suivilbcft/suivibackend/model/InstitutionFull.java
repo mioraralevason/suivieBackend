@@ -1,5 +1,6 @@
 package com.suivilbcft.suivibackend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.time.LocalDate;
@@ -8,7 +9,8 @@ import java.util.Set;
 
 @Entity
 @Table(name = "institution")
-public class Institution {
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+public class InstitutionFull {
     @Id
     @Column(name = "id_institution", length = 250)
     private String idInstitution;
@@ -87,10 +89,10 @@ public class Institution {
     private Set<InstitutionActivityResponse> activityResponses = new HashSet<>();
 
     // Constructors
-    public Institution() {}
+    public InstitutionFull() {}
 
     // Simplified constructor used in registration
-    public Institution(String idInstitution, String denominationSociale, String adresse, Utilisateur utilisateur) {
+    public InstitutionFull(String idInstitution, String denominationSociale, String adresse, Utilisateur utilisateur) {
         this.idInstitution = idInstitution;
         this.denominationSociale = denominationSociale;
         this.adresseSiegeSocial = adresse;
@@ -100,10 +102,10 @@ public class Institution {
     }
 
     // Full constructor
-    public Institution(String idInstitution, String denominationSociale, String nomCommercial, 
-                       String formeJuridique, LocalDate dateDebutOperations, String adresseSiegeSocial, 
-                       String adresseActivitePrincipale, String adressesSecondaires, String numeroTelephone, 
-                       String adresseEmail, String listeActivites, String activitePrincipale, 
+    public InstitutionFull(String idInstitution, String denominationSociale, String nomCommercial,
+                       String formeJuridique, LocalDate dateDebutOperations, String adresseSiegeSocial,
+                       String adresseActivitePrincipale, String adressesSecondaires, String numeroTelephone,
+                       String adresseEmail, String listeActivites, String activitePrincipale,
                        String activitesSecondaires, LocalDateTime validatedAt, LocalDateTime completedInfoAt,
                        Utilisateur utilisateur) {
         this.idInstitution = idInstitution;

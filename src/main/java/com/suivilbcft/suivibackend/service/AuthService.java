@@ -1,8 +1,8 @@
 package com.suivilbcft.suivibackend.service;
 
-import com.suivilbcft.suivibackend.dto.AuthResponse;
-import com.suivilbcft.suivibackend.dto.LoginRequest;
-import com.suivilbcft.suivibackend.dto.RegisterRequest;
+import com.suivilbcft.suivibackend.dto.response.AuthResponse;
+import com.suivilbcft.suivibackend.dto.request.LoginRequest;
+import com.suivilbcft.suivibackend.dto.request.RegisterRequest;
 import com.suivilbcft.suivibackend.model.Institution;
 import com.suivilbcft.suivibackend.model.Role;
 import com.suivilbcft.suivibackend.model.Utilisateur;
@@ -15,6 +15,7 @@ import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Key;
 import java.util.Optional;
@@ -22,6 +23,7 @@ import java.util.UUID;
 import java.util.Arrays;
 
 @Service
+@Transactional
 public class AuthService {
     private final UtilisateurRepository utilisateurRepository;
     private final RoleRepository roleRepository;
@@ -44,6 +46,21 @@ public class AuthService {
         if (userOpt.isPresent() && passwordEncoder.matches(request.getMotDePasse(), userOpt.get().getMotDePasse())) {
             Utilisateur user = userOpt.get();
             String token = generateToken(user.getEmail(), user.getRole().getLibelle());
+
+            // For institution users, check if they need to complete basic information
+            if ("institution".equals(user.getRole().getLibelle())) {
+                Optional<Institution> institutionOpt = institutionRepository.findById(user.getIdUtilisateur());
+                if (institutionOpt.isPresent()) {
+                    Institution institution = institutionOpt.get();
+                    boolean needsCompletion = institution.getCompletedInfoAt() == null;
+
+                    // Return the role with completion status info
+                    String roleWithStatus = user.getRole().getLibelle() +
+                        (needsCompletion ? ":needs_completion" : ":completed");
+                    return new AuthResponse(token, roleWithStatus);
+                }
+            }
+
             return new AuthResponse(token, user.getRole().getLibelle());
         }
         throw new RuntimeException("Email ou mot de passe invalide");

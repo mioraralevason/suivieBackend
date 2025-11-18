@@ -60,3 +60,9 @@ CETTE STRUCTURE PERMET DE :
 - Adapter les questions d'activité en fonction du secteur de l'institution
 - Maintenir une traçabilité du processus de complétion
 - Garantir la qualité des données avant la validation finale
+
+il faut que l'institution complete le formulaire 'InstitutionalInfoCompletion' apres login si 
+
+ Si completed_info_at IS NULL → Obligation de compléter les informations de base
+- Si completed_info_at IS NOT NULL ET validated_at IS NULL → Accès aux fonctionnalités mais pas de validation finale
+- Si validated_at IS NOT NULL → Accès complet au système

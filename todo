@@ -7,6 +7,7 @@
     SC <=1 dia FA = 0.35
     SC <=2 dia FA = 0.60
     SC <=3 dia FA = 0.85
+    SC <=3 dia FA = 1
     SC sup 3 dia FA = 0.35
 
 
@@ -29,3 +30,20 @@ Pondérations : Clients (0,25), Produits (0,25), Transactions (0,20),
 
 Pondérations :CDD/EDD (0,25),TM/STR (0,25), SFC/PPE (0,20), Gouvernance (0,10), Audit (0,10), Formation (0,05), IT (0,05)
 SC ito 
+
+
+RR:
+1: faible
+2:modére
+3:élevé
+
+
+SELECT * FROM institution WHERE id_utilisateur = 'dd1fcb0a-b8cd-46c0-972a-b4145bfb1bca';
+
+Je vois le problème ! Dans votre DataContext, vous chargez les institutions uniquement si l'utilisateur est admin/superviseur ou si user.institutionId existe. Mais d'après les logs précédents, user.institutionId semble être undefined.
+Le problème vient de votre AuthContext lors du login - l'institutionId n'est probablement pas récupéré correctement.
+
+
+pourqoui dans quand je click sur le 'profil';ucune institution associée
+Votre compte utilisateur n'est pas associé à une institution.
+Veuillez contacter l'administrateur pour associer votre compte à une institution.

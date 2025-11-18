@@ -1,5 +1,7 @@
 package com.suivilbcft.suivibackend.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.time.LocalDate;
@@ -8,6 +10,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "institution")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Institution {
     @Id
     @Column(name = "id_institution", length = 250)
@@ -77,6 +80,7 @@ public class Institution {
     // Link to utilisateur (user)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_utilisateur", nullable = false, referencedColumnName = "id_utilisateur")
+    @JsonBackReference
     private Utilisateur utilisateur;
 
     // Relationships to questionnaire responses (normalized)
